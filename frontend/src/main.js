@@ -11,7 +11,7 @@ import moment from 'moment'
 import Vuelidate from 'vuelidate'
 import Toastr from 'vue-toastr'
 
-axios.defaults.baseURL = 'http://13.209.41.188:3000'
+axios.defaults.baseURL = 'http://0.0.0.0:3000'
 
 Vue.prototype.$http = axios
 Vue.prototype.$eventHub = new Vue()
