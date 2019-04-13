@@ -1,9 +1,9 @@
 var Issue = require('../models/issue.model');
 var User = require('../models/user.model');
+var Participation = require('../models/participation.model');
 var config = require('../config/config');
 var Tx = require('ethereumjs-tx');
 var Web3 = require('web3');
-var User = require('../models/user.model');
 
 var web3 = new Web3(new Web3.providers.HttpProvider(config.web3Provider));
 var erc20 = new web3.eth.Contract(JSON.parse(config.contractABI), config.contractAccount);
@@ -14,19 +14,17 @@ var erc20 = new web3.eth.Contract(JSON.parse(config.contractABI), config.contrac
  * @property {number} req.query.limit - Limit number of issues to be returned.
  * @returns {Issue[]}
  */
-function list(req, res, next) {
+async function list(req, res, next) {
   const { limit = 0, offset = 0 } = req.query;
-  Issue.list({ limit, offset })
-    .then(events => {
-      let result = {
-        totalDocs: events.length,
-        offset: req.query.offset,
-        limit: req.query.limit,
-        docs: events
-      };
-      res.json(result);
-    })
-    .catch(e => next(e));
+
+  let result = {
+    offset: req.query.offset,
+    limit: req.query.limit,
+    totalDocs: await Issue.count(),
+    docs: await Issue.list({ limit, offset })
+  };
+
+  res.json(result);
 }
 
 /**
@@ -67,7 +65,7 @@ function load(req, res, next, issueId) {
   Issue.get(issueId)
     .then((issue) => {
       req.issue = issue;
-      return next()
+      return next();
     }) 
     .catch(e => next(e));
 }
