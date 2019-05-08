@@ -92,4 +92,10 @@ function getRandomNumber(req, res) {
   });
 }
 
-module.exports = { login, loadUserToRegister, getRandomNumber };
+function test(req, res) {
+  return res.json({
+    mongo: config.mongo
+  });
+}
+
+module.exports = { login, loadUserToRegister, getRandomNumber, test };

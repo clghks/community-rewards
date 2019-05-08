@@ -8,6 +8,7 @@ const router = express.Router(); // eslint-disable-line new-cap
 
 /** POST /api/auth/login - Returns token if correct username and password is provided */
 router.route('/login')
+  .get(authCtrl.test)
   .post(validate(paramValidation.login), authCtrl.login);
 
 /** POST /api/auth/register */
